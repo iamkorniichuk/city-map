@@ -1,3 +1,7 @@
+# Production specific files
+db.sqlite3
+files/
+
 # Django
 *.log
 *.pot
