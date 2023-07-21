@@ -27,7 +27,7 @@ class Media(models.Model):
     file = models.FileField(
         _("file"),
         validators=[
-            MimeTypeValidator(["image", "video"]),
+            MimeTypeValidator(["image/*", "video/*"]),
         ],
     )
     content_type = models.CharField(_("type"), max_length=64, blank=True)

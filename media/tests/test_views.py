@@ -8,7 +8,7 @@ from django.conf import settings
 from django.test import Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from .models import Media
+from media.models import Media
 
 
 def open_media_files(names):
@@ -43,6 +43,6 @@ class MediaListTestCase(TestCase):  # TODO: Delete downloaded files after testin
         response = self.client.post(self.url, {"media": files})
 
         json = response.json()
-        equal_length = len(files) == len(json)
+        equal_lengths = len(files) == len(json)
         models_exists = all([Media.objects.filter(pk=data["id"]) for data in json])
-        assert equal_length and models_exists
+        assert equal_lengths and models_exists
