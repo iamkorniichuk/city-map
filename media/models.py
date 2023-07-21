@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import ExpressionWrapper, Q
 from django.utils.translation import gettext_lazy as _
 
-from .validators import ContentTypeValidator
+from .validators import MimeTypeValidator
 
 
 class MediaManager(models.Manager):
@@ -27,7 +27,7 @@ class Media(models.Model):
     file = models.FileField(
         _("file"),
         validators=[
-            ContentTypeValidator(["image", "video"]),
+            MimeTypeValidator(["image", "video"]),
         ],
     )
     content_type = models.CharField(_("type"), max_length=64, blank=True)

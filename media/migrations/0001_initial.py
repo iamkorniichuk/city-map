@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                     models.FileField(
                         upload_to="",
                         validators=[
-                            media.validators.ContentTypeValidator(["image", "video"])
+                            media.validators.MimeTypeValidator(["image", "video"])
                         ],
                         verbose_name="file",
                     ),

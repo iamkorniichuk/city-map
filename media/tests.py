@@ -1,5 +1,6 @@
 from functools import wraps
 from os.path import join
+import magic
 
 from django.test import TestCase
 from django.urls import reverse
@@ -17,10 +18,9 @@ def open_media_files(names):
             files = []
             for name in names:
                 path = join(settings.MEDIA_ROOT, name)
-                file = open(path, "rb")
-                files.append(
-                    SimpleUploadedFile(name, file.read(), content_type="image")
-                )
+                file = open(path, "rb").read()
+                mime_type = magic.from_buffer(file, mime=True)
+                files.append(SimpleUploadedFile(name, file, content_type=mime_type))
 
             result = func(*args, **kwargs, files=files)
 
@@ -34,7 +34,7 @@ def open_media_files(names):
     return decorator
 
 
-class MediaListTestCase(TestCase):
+class MediaListTestCase(TestCase):  # TODO: Delete downloaded files after testing
     client = Client()
     url = reverse("media:list")
 
@@ -43,6 +43,6 @@ class MediaListTestCase(TestCase):
         response = self.client.post(self.url, {"media": files})
 
         json = response.json()
-        assert len(files) == len(json)
-
-        assert all([Media.objects.filter(pk=data["id"]) for data in json])
+        equal_length = len(files) == len(json)
+        models_exists = all([Media.objects.filter(pk=data["id"]) for data in json])
+        assert equal_length and models_exists
