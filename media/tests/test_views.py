@@ -1,5 +1,6 @@
 from functools import wraps
 from os.path import join
+from typing import List
 import magic
 
 from django.test import TestCase
@@ -35,14 +36,21 @@ def open_media_files(names):
 
 
 class MediaListTestCase(TestCase):  # TODO: Delete downloaded files after testing
-    client = Client()
     url = reverse("media:list")
+    client = Client()
+
+    def setUp(self):
+        self.models: List[Media] = []
 
     @open_media_files(["image.jpg", "transparent_image.png", "video.mp4"])
     def test_multiple_files_upload(self, files):
         response = self.client.post(self.url, {"media": files})
 
-        json = response.json()
-        equal_lengths = len(files) == len(json)
-        models_exists = all([Media.objects.filter(pk=data["id"]) for data in json])
-        assert equal_lengths and models_exists
+        for id in [data["id"] for data in response.json()]:
+            self.models.append(Media.objects.get(pk=id))
+
+        assert len(files) == len(self.models)
+
+    def tearDown(self):
+        for model in self.models:
+            model.delete()
