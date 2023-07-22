@@ -23,10 +23,8 @@ class MediaManager(models.Manager):
         )
 
 
-# TODO: Delete unassigned files
 class Media(models.Model):
-    # TODO: Rename to attachment?
-    file = models.FileField(
+    attachment = models.FileField(
         _("file"),
         validators=[
             MimeTypeValidator(["image/*", "video/*"]),
@@ -35,10 +33,10 @@ class Media(models.Model):
     content_type = models.CharField(_("type"), max_length=64, blank=True)
 
     def save(self, *args, **kwargs):
-        self.content_type = self.file.file.content_type
+        self.content_type = self.attachment.file.content_type
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.file.close()
-        self.file.delete(save=False)
+        self.attachment.close()
+        self.attachment.delete(save=False)
         return super().delete(*args, **kwargs)

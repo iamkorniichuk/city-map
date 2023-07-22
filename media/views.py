@@ -16,7 +16,7 @@ class MediaList(generics.ListCreateAPIView):
     def upload_files(self, media):
         media_objects = []
         for file in media:
-            serializer = self.serializer_class(data={"file": file})
+            serializer = self.serializer_class(data={"attachment": file})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             media_objects.append(serializer.data)

@@ -7,14 +7,13 @@ class MimeTypeValidatorTestCase(TestCase):
     patterns = ["image/png", "*/webm", "text/*"]
     validator = MimeTypeValidator(patterns)
 
-    def test_full_match(self):
-        assert self.validator.is_type_valid("image/png")
+    def test_pattern_converting(self):
+        full_match = self.validator.is_type_valid("image/png")
+        leading_asterisk = self.validator.is_type_valid("video/webm")
+        final_asterisk = self.validator.is_type_valid("text/plain")
+        invalid = self.validator.is_type_valid("videoimage/png") == False
+        assert full_match and leading_asterisk and final_asterisk and invalid
 
-    def test_leading_asterisk(self):
-        assert self.validator.is_type_valid("video/webm")
-
-    def test_final_asterisk(self):
-        assert self.validator.is_type_valid("text/plain")
-
-    def test_invalid(self):
-        assert self.validator.is_type_valid("videoimage/png") == False
+    # TODO: To end
+    def test_mime_recognition(self):
+        ...

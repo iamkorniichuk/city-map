@@ -12,9 +12,7 @@ class MimeTypeValidator:
         self.type_patterns = type_patterns
 
     def __call__(self, value):
-        file = value.file.read()
-        mime_type = magic.from_buffer(file, mime=True)
-
+        mime_type = self.get_mime(value.file)
         if not self.is_type_valid(mime_type):
             raise ValidationError(
                 _(
@@ -22,15 +20,20 @@ class MimeTypeValidator:
                 )
             )
 
+    @classmethod
+    def get_mime(cls, file):
+        file = file.read()
+        return magic.from_buffer(file, mime=True)
+
     def is_type_valid(self, mime_type):
         for pattern in self.type_patterns:
-            regex = self.convert_pattern_to_regex(pattern)
+            regex = self.convert_pattern(pattern)
             if re.match(regex, mime_type):
                 return True
         return False
 
     @classmethod
-    def convert_pattern_to_regex(cls, pattern):
+    def convert_pattern(cls, pattern):
         return "^" + pattern.replace("*", ".+") + "$"
 
     def __eq__(self, other):

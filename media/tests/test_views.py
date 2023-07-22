@@ -12,13 +12,13 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from media.models import Media
 
 
-def open_media_files(names):
+def open_test_files(names):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             files = []
             for name in names:
-                path = join(settings.MEDIA_ROOT, name)
+                path = join(settings.MEDIA_ROOT, "test", name)
                 file = open(path, "rb").read()
                 mime_type = magic.from_buffer(file, mime=True)
                 files.append(SimpleUploadedFile(name, file, content_type=mime_type))
@@ -35,14 +35,14 @@ def open_media_files(names):
     return decorator
 
 
-class MediaListTestCase(TestCase):  # TODO: Delete downloaded files after testing
+class MediaListTestCase(TestCase):
     url = reverse("media:list")
     client = Client()
 
     def setUp(self):
         self.models: List[Media] = []
 
-    @open_media_files(["image.jpg", "transparent_image.png", "video.mp4"])
+    @open_test_files(["image.jpg", "transparent_image.png", "video.mp4"])
     def test_multiple_files_upload(self, files):
         response = self.client.post(self.url, {"media": files})
 
