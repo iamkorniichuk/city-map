@@ -3,20 +3,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from .models import Media
 
 
-def get_related_objects(model_class):
-    return [
-        f for f in model_class._meta.get_fields() if f.auto_created and not f.concrete
-    ]
-
-
-# TODO: Redo
 def delete_unassigned_files():
-    fields = get_related_objects(Media)
-    for field in fields:
-        related_name = field.related_name
-        filters = {related_name + "__isnull": True}
-        number, objects = Media.objects.filter(**filters).delete()
-        print(f"{number} unassigned files were deleted.")
+    number, objects = Media.objects.filter(object_id__isnull=True).delete()
+    print(f"{number} unassigned files were deleted.")
 
 
 def start():

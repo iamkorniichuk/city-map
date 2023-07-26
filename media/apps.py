@@ -7,5 +7,6 @@ class MediaConfig(AppConfig):
 
     def ready(self):
         from . import tasks
+        from .handlers import auto_delete_files
 
         tasks.start()

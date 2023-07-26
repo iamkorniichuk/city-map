@@ -59,10 +59,5 @@ class Media(models.Model):
         self.attachment_type = magic.from_buffer(file.read(1024), mime=True)
         file.close()
 
-    def delete(self, *args, **kwargs):
-        self.attachment.close()
-        self.attachment.delete(save=False)
-        return super().delete(*args, **kwargs)
-
     def __str__(self):
         return f"{self.pk}: {self.attachment_type}"

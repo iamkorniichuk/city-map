@@ -1,6 +1,5 @@
 from functools import wraps
 from os.path import join
-from typing import List
 import magic
 
 from django.test import TestCase
@@ -40,7 +39,7 @@ class MediaListTestCase(TestCase):
     client = Client()
 
     def setUp(self):
-        self.models: List[Media] = []
+        self.models = []
 
     @open_test_files(["image.jpg", "transparent_image.png", "video.mp4"])
     def test_multiple_files_upload(self, files):
