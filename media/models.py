@@ -63,3 +63,6 @@ class Media(models.Model):
         self.attachment.close()
         self.attachment.delete(save=False)
         return super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.pk}: {self.attachment_type}"

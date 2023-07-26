@@ -9,6 +9,7 @@ def get_related_objects(model_class):
     ]
 
 
+# TODO: Redo
 def delete_unassigned_files():
     fields = get_related_objects(Media)
     for field in fields:
