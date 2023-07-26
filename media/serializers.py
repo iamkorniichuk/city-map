@@ -7,6 +7,7 @@ class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = "__all__"
+        # exclude = ("content_type", "object_id", "content_object")
         extra_kwargs = {
-            "type": {"read_only": True},
+            "attachment_type": {"read_only": True},
         }
