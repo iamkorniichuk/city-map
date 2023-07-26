@@ -13,7 +13,3 @@ class MimeTypeValidatorTestCase(TestCase):
         final_asterisk = self.validator.is_type_valid("text/plain")
         invalid = self.validator.is_type_valid("videoimage/png") == False
         assert full_match and leading_asterisk and final_asterisk and invalid
-
-    # TODO: To end
-    def test_mime_recognition(self):
-        ...
