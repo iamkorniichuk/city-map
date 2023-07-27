@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.translation import gettext_lazy as _
 
@@ -35,6 +36,9 @@ class Place(models.Model):
         self.longitude = point["y"]
 
     location = property(get_location, set_location)
+
+    def get_absolute_url(self):
+        return reverse("places:detail", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.name

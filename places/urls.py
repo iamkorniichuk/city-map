@@ -8,5 +8,5 @@ app_name = PlacesConfig.name
 
 urlpatterns = [
     path("", PlaceList.as_view(), name="list"),
-    path("<int:pk>", PlaceDetail.as_view(), name="detail"),
+    path("<slug:slug>", PlaceDetail.as_view(), name="detail"),
 ]

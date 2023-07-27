@@ -12,3 +12,4 @@ class PlaceList(generics.ListCreateAPIView):
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PlaceSerializer
     queryset = Place.objects.all()
+    lookup_field = "slug"
