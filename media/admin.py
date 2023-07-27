@@ -1,12 +1,17 @@
 from django.utils.html import format_html
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 from .models import Media
 
 
+class MediaInline(GenericTabularInline):
+    model = Media
+
+
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
-    exclude = ("content_type", "object_id", "content_object")
+    exclude = ("content_type", "object_id")
     list_display = ("pk", "attachment_tag")
 
     def attachment_tag(self, obj):
