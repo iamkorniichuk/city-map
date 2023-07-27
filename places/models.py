@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.translation import gettext_lazy as _
 
+from common.utils import unique_slugify
 from media.models import Media
 
 
@@ -16,10 +17,15 @@ class CoordinateField(models.DecimalField):
 
 class Place(models.Model):
     name = models.CharField(_("name"), max_length=64)
+    slug = models.SlugField(_("slug"), unique=True, blank=True, editable=False)
     latitude = CoordinateField(_("latitude"))
     longitude = CoordinateField(_("longitude"))
     description = models.TextField(_("description"))
     media = GenericRelation(Media)
+
+    def save(self, *args, **kwargs):
+        self.slug = unique_slugify(self.name, Place)
+        super().save(*args, **kwargs)
 
     def get_location(self):
         return {"x": self.latitude, "y": self.longitude}
