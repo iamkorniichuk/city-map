@@ -7,6 +7,6 @@ from .models import Place
 
 @admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ("pk", "name", "location")
+    list_display = ("pk", "name")
     inlines = (MediaInline,)
     exclude = ("",)

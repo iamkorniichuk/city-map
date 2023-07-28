@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from common.utils import unique_slugify
 from media.models import Media
+from users.models import User
 
 
 class CoordinateField(models.DecimalField):
@@ -23,6 +24,8 @@ class Place(models.Model):
     longitude = CoordinateField(_("longitude"))
     description = models.TextField(_("description"))
     media = GenericRelation(Media)
+
+    owner = models.ForeignKey(User, models.CASCADE, related_name="places")
 
     def save(self, *args, **kwargs):
         self.slug = unique_slugify(self.name, Place)
