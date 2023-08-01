@@ -146,7 +146,7 @@ REST_FRAMEWORK = {
         "knox.auth.TokenAuthentication",
     ],
 }
-# TODO: Doesn't use user serializer's setting
+
 REST_KNOX = {
     "USER_SERIALIZER": "users.serializers.UserTokenSerializer",
 }

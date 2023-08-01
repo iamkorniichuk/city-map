@@ -6,7 +6,6 @@ from drf_writable_nested import WritableNestedModelSerializer
 from .models import User
 
 
-# TODO: Doesn't use model fields
 class UserTokenSerializer(serializers.Serializer):
     phone_number = PhoneNumberField()
     password = serializers.CharField()

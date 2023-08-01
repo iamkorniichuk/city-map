@@ -3,12 +3,13 @@ from rest_framework import generics
 from rest_framework.response import Response
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView, LogoutView, LogoutAllView
+from knox.settings import knox_settings
 
-from .serializers import UserTokenSerializer, UserSerializer
+from .serializers import UserSerializer
 
 
 class LoginView(generics.GenericAPIView):
-    serializer_class = UserTokenSerializer
+    serializer_class = knox_settings.USER_SERIALIZER
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args, **kwargs):
