@@ -13,6 +13,8 @@ class PlaceSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Place
         fields = "__all__"
+        depth = 1
         extra_kwargs = {
             "slug": {"read_only": True},
+            "owner": {"read_only": True},
         }

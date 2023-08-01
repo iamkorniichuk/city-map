@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import ExpressionWrapper, Q
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.translation import gettext_lazy as _
@@ -17,6 +18,20 @@ class CoordinateField(models.DecimalField):
         )
 
 
+class PlaceManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .annotate(
+                has_owner=ExpressionWrapper(
+                    Q(owner__isnull=False),
+                    output_field=models.BooleanField(),
+                )
+            )
+        )
+
+
 class Place(models.Model):
     name = models.CharField(_("name"), max_length=64)
     slug = models.SlugField(_("slug"), unique=True, blank=True, editable=False)
@@ -25,20 +40,17 @@ class Place(models.Model):
     description = models.TextField(_("description"))
     media = GenericRelation(Media)
 
-    owner = models.ForeignKey(User, models.CASCADE, related_name="places")
+    owner = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name="places",
+        null=True,
+        blank=True,
+    )
 
     def save(self, *args, **kwargs):
         self.slug = unique_slugify(self.name, Place)
         super().save(*args, **kwargs)
-
-    def get_location(self):
-        return {"x": self.latitude, "y": self.longitude}
-
-    def set_location(self, point):
-        self.latitude = point["x"]
-        self.longitude = point["y"]
-
-    location = property(get_location, set_location)
 
     def get_absolute_url(self):
         return reverse("places:detail", kwargs={"slug": self.slug})
