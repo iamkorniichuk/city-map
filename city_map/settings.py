@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "knox",
     "users",
     "media",
     "places",
@@ -123,20 +124,10 @@ STATIC_URL = "static/"
 
 
 # Media files
-
 MEDIA_ROOT = BASE_DIR / "files"
 MEDIA_URL = "files/"
 
-# Rest Framework
-
-REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": [
-        "rest_framework.renderers.JSONRenderer",
-    ],
-}
-
 # User
-
 AUTH_USER_MODEL = "users.User"
 
 # Default primary key field type
@@ -145,3 +136,17 @@ AUTH_USER_MODEL = "users.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 PHONENUMBER_DEFAULT_REGION = "UA"
+
+# Rest Framework
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "knox.auth.TokenAuthentication",
+    ],
+}
+# TODO: Doesn't use user serializer's setting
+REST_KNOX = {
+    "USER_SERIALIZER": "users.serializers.UserTokenSerializer",
+}
