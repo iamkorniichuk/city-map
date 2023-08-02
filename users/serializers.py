@@ -1,12 +1,12 @@
-from django.contrib.auth import authenticate
 from phonenumber_field.serializerfields import PhoneNumberField
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from drf_writable_nested import WritableNestedModelSerializer
 
 from .models import User
 
 
-class UserTokenSerializer(serializers.Serializer):
+class LoginSerializer(serializers.Serializer):
     phone_number = PhoneNumberField()
     password = serializers.CharField()
 
@@ -19,11 +19,10 @@ class UserTokenSerializer(serializers.Serializer):
         )
 
 
-# TODO: Separate changing password
 class UserSerializer(WritableNestedModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
+        exclude = ("password",)
+
+
+# TODO: Add changing password
